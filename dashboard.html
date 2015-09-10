@@ -3,41 +3,41 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
-<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
-<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/css/base/jquery.ui.all.min.css" type="text/css" />
-<link href="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.css" rel="stylesheet">
-<link href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.css" rel="stylesheet">
-<link href="//cdnjs.cloudflare.com/ajax/libs/rickshaw/1.3.0/rickshaw.min.css" rel="stylesheet">
+
+<link type="text/css" rel="stylesheet" href="css/bootstrap-combined.min.css">
+<link type="text/css" rel="stylesheet" href="css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="libs/jqueryui/1.10.3/css/base/jquery.ui.all.min.css">
+<link type="text/css" rel="stylesheet" href="libs/select2/3.4.1/select2.css">
+<link type="text/css" rel="stylesheet" href="libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.css">
+<link type="text/css" rel="stylesheet" href="libs/rickshaw/1.5.1/rickshaw.min.css">
 <link type="text/css" rel="stylesheet" href="css/graphitus.css">
 <link type="text/css" rel="stylesheet" href="css/graph.css">
 <link type="text/css" rel="stylesheet" href="css/detail.css">
 <link type="text/css" rel="stylesheet" href="css/legend.css">
 <link type="text/css" rel="stylesheet" href="css/extensions.css">
 
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/select2/3.4.1/select2.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.9/d3.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/rickshaw/1.3.0/rickshaw.min.js"></script>
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.4.0/moment.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.0.3/moment-timezone.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/slidesjs/3.0/jquery.slides.min.js"></script>
-<script src="js/moment-timezone-data.js"></script>
-
+<script type="text/javascript" src="libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script type="text/javascript" src="libs/select2/3.4.1/select2.min.js"></script>
+<script type="text/javascript" src="libs/jquery-cookie/1.3.1/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="libs/d3/3.5.5/d3.min.js"></script>
+<script type="text/javascript" src="libs/rickshaw/1.5.1/rickshaw.js"></script>
+<script type="text/javascript" src="libs/slidesjs/3.0/jquery.slides.min.js"></script>
+<script type="text/javascript" src="libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="libs/bootstrap-lightbox/0.5/bootstrap-lightbox.min.js"></script>
+<script type="text/javascript" src="libs/moment.js/2.8.1/moment.min.js"></script>
+<script type="text/javascript" src="libs/moment.js/timezone/0.2.1/moment-timezone-with-data-2010-2020.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui-timepicker-addon.min.js"></script>
 <script type="text/javascript" src="js/jquery.waitforimages.min.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/dashboard.js"></script>
 <script type="text/javascript" src="js/extensions.js"></script>
 <script type="text/javascript" src="js/extended-graph.js"></script>
-<script type="text/javascript" src="js/histogram.js"></script>
+<script type="text/javascript" src="js/graph-evolution.js"></script>
 <script type="text/javascript" src="js/slideshow.js"></script>
 <script type="text/javascript" src="js/grafana.js"></script>
+<script type="text/javascript" src="js/histogram.js"></script>
 
 <script type="text/javascript" charset="utf-8">
 $(document).ready(function() {
@@ -47,88 +47,81 @@ $(document).ready(function() {
 
 <script type="text/template" id="tmpl-dashboards-view">
 <% for (idx in config.data) { %>
-    <% for(col=0; col<config.columns; col++) { %>
-		<% if( (idx % config.columns) == col) { %>
-        <div id="item<%=idx%>" class="well span<%=12/config.columns%>" style="width:<%=config.width%>px">
-			<h5 class="pull-left" style="margin: 0px;">
-                <span id="title<%=idx%>"></span>
-                <% if(config.data[idx].description){ %>
-                    <a href="#" rel="tooltip" data-toggle="tooltip" title="<%=applyParameters(config.data[idx].description)%>"><i class="fa fa-question-circle"/></a>
-                <% } %>
-            </h5>
-            <div class="pull-right">
-            <div class="pull-left btn-group">
-                <a class="btn btn-small btn-success dropdown-toggle hspacer" data-toggle="dropdown" href="#" title="Functions..."><i class="fa fa-lg fa-cogs"></i><span class="fa fa-lg fa-caret-down"></span></a>
-                <ul class="dropdown-menu">      
+    <div id="item<%=idx%>" class="well span" style="width:<%=config.width%>px">
+        <h5 style="margin: 0px;">
+            <span id="title<%=idx%>"></span>
+            <% if(config.data[idx].description){ %>
+                <a href="#" rel="tooltip" data-toggle="tooltip" title="<%=applyParameters(config.data[idx].description)%>"><i class="fa fa-question-circle"/></a>
+            <% } %>
+            <span class="pull-right graph_buttons">
+                <div class="pull-left btn-group">
+                    <a class="btn btn-mini btn-success dropdown-toggle" data-toggle="dropdown" href="#" title="Functions..."><i class="fa fa-lg fa-cogs"></i><span class="fa fa-lg fa-caret-down"></span></a>
+                    <ul class="dropdown-menu">
                     <li>
-                        <input id="yMin<%=idx%>" type="text" class="input-mini hspacer" placeholder="yMin">
-                        <label class="pull-right hspacer">
-                           <a target="_blank" class="label label-info pull-left" href="http://graphite.readthedocs.org/en/1.0/url-api.html"><i class="fa fa-question-circle"></i> Help</a>
-                        </label>
+                    <input id="yMin<%=idx%>" type="text" class="input-mini hspacer" placeholder="yMin">
+                    <label class="pull-right hspacer">
+                    <a target="_blank" class="label label-info pull-left" href="http://graphite.readthedocs.org/en/1.0/url-api.html"><i class="fa fa-question-circle"></i> Help</a>
+                    </label>
                     </li>
                     <li>
-                        <input id="yMax<%=idx%>" type="text" class="input-mini hspacer" placeholder="yMax">
+                    <input id="yMax<%=idx%>" type="text" class="input-mini hspacer" placeholder="yMax">
                     </li>
                     <li>
-                        <input id="otherUrlParamName<%=idx%>" type="text" class="input-mini hspacer" placeholder="name">
-                        
-                        <input id="otherUrlParamValue<%=idx%>" type="text" class="input-mini hspacer" placeholder="value">
-                    </li>                    
-                    <li>
-                         <label>
-                            <button class="btn btn-small btn-primary pull-right hspacer" onclick="updateGraph(<%=idx%>);">Update</button>
-                         </label>
+                    <input id="otherUrlParamName<%=idx%>" type="text" class="input-mini hspacer" placeholder="name">
+                    <input id="otherUrlParamValue<%=idx%>" type="text" class="input-mini hspacer" placeholder="value">
                     </li>
-                </ul>
-            </div>
-            <div class="pull-left btn-group">
-                <a class="btn btn-small btn-warning dropdown-toggle hspacer" data-toggle="dropdown" href="#" title="Images..."><i class="fa fa-lg fa-picture-o"></i><span class="fa fa-lg fa-caret-down"></span></a>
-                <ul class="dropdown-menu">      
+                    <li>
+                    <label>
+                    <button class="btn btn-mini btn-primary pull-right hspacer" onclick="updateGraph(<%=idx%>,'forced');">Update</button>
+                    </label>
+                    </li>
+                    </ul>
+                </div>
+                <div class="pull-left btn-group">
+                    <a class="btn btn-mini btn-warning dropdown-toggle hspacer" data-toggle="dropdown" href="#" title="Images..."><i class="fa fa-lg fa-picture-o"></i><span class="fa fa-lg fa-caret-down"></span></a>
+                    <ul class="dropdown-menu">
                     <li class="navbar-text"><a id="lLink<%=idx%>" href="#" target="_blank"><i class="fa fa-lg fa-picture-o"></i> large</a></li>
                     <li class="navbar-text"><a id="mLink<%=idx%>" href="#" target="_blank"><i class="fa fa-lg fa-picture-o"></i> medium</a></li>
                     <li class="navbar-text"><a id="sLink<%=idx%>" href="#" target="_blank"><i class="fa fa-lg fa-picture-o"></i> small</a></li>
-                </ul>
-            </div>
-            <div class="pull-right">
-                <a href="#" class="btn btn-small btn-primary pull-right hspacer" onclick="toggleSource(<%=idx%>); return false;" title="Source"><i class="fa fa-lg fa-list"></i></a>
-                <a id="gLink<%=idx%>" href="#" title="Graphlot"><button class="btn btn-small btn-info pull-right hspacer"><i class="fa fa-lg fa-signal"></i></button></a>
-                <a href="#" class="btn btn-small pull-right hspacer" onclick="showHistogram(<%=idx%>); return false;" title="Histogram"><i class="fa fa-lg fa-bar-chart-o"></i></a>
-            </div>
-            </div>
-            <br/>            
-            <a href="#" onclick="showExtendedGraph(<%=idx%>); return false;"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></a>
-            <br/>
-            <div id="sourceContainer<%=idx%>"class="hide">
-                <div><textarea id="source<%=idx%>" style="width:<%=config.width-10%>px" class="source" placeholder="Target Source"></textarea></div>
-                <div><input type="text" id="graphParams<%=idx%>" style="width:<%=config.width-10%>px" placeholder="Additional URL Parameters" class="source"/></div>
-                <button class="btn btn-small" onclick="updateSource(<%=idx%>);">Update</button>
-            </div>
-        </div>
-	    <% } %>
-	<% } %>
+                    </ul>
+                </div>
+                <a href="#" class="btn btn-mini btn-primary " onclick="toggleSource(<%=idx%>); return false;" title="Source"><i class="fa fa-lg fa-list"></i></a>
+                <a id="gLink<%=idx%>" href="#" title="Graphlot"><button class="btn btn-mini btn-info"><i class="fa fa-lg fa-signal"></i></button></a>
+                <a href="#" class="btn btn-mini" onclick="showHistogram(<%=idx%>); return false;" title="Histogram"><i class="fa fa-lg fa-bar-chart-o"></i></a>
+                <a href="#" onclick="showGraphEvolution(<%=idx%>); return false;" title="Show graph evolution"><img src="images/btn_graphevolution.png"/></a>
+            </span>
+        </h5>
+        <a href="#" onclick="showExtendedGraph(<%=idx%>); return false;"><div class="img-spinning" style="height: <%=config.height%>px"><img id="img<%=idx%>" class="img-rounded" width="<%=config.width%>" height="<%=config.height%>"/></div></a>
+        <br/>
+        <div id="sourceContainer<%=idx%>"class="hide">
+            <div><textarea id="source<%=idx%>" style="width:<%=config.width-10%>px; height:<%=config.height-102%>px" class="source" placeholder="Target Source"></textarea></div>
+            <div><input type="text" id="graphParams<%=idx%>" style="width:<%=config.width-10%>px" placeholder="Additional URL Parameters" class="source"/></div>
+            <button class="btn btn-mini" onclick="updateSource(<%=idx%>);">Update</button>
+       </div>
+    </div>
 <% } %>
 </script>
 <script type="text/template" id="tmpl-dashboards-menu">
 <% if(isLeaf){ %>
-    <li>
-        <a href="dashboard.html?id=<%= path %>"><%= name %></a>
-    </li>
+  <li>
+    <a href="dashboard.html?id=<%= realpath %><%= parametersPreset %>"><%= name %></a>
+  </li>
 <% }else{ %>
-    <li class="dropdown-submenu">
-        <a tabindex="-1" href="#"><%= name %></a>
-        <ul class="dropdown-menu">
-            <% for (node in dashboardsRoot) { %>
-                <%= generateDashboardsMenu(node, path + "." + node, dashboardsRoot[node], depth++) %>
-            <% } %>
-        </ul>
-    </li>
+  <li class="dropdown-submenu">
+    <a tabindex="-1" href="#"><%= name %></a>
+      <ul class="dropdown-menu">
+        <% for (node in dashboardsRoot) { %>
+          <%= generateDashboardsMenu(node, path + "." + node, dashboardsRoot[node], depth++) %>
+        <% } %>
+      </ul>
+  </li>
 <% } %> 
 </script>
 <script type="text/template" id="tmpl-toolbar">
     <a class="brand hidden-zoom1" href="index.html">&nbsp; graphitus</a>
     <ul class="nav">
         <li class="dropdown hidden-zoom3"> 
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><%= title %><b class="fa fa-lg fa-caret-down"></b></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span id="dashboard_title"><%= title %></span><b class="fa fa-lg fa-caret-down"></b></a>
             <ul id="dashboards" class="dropdown-menu">
                 <%= dashboardsMenu %>
             </ul>  
@@ -157,27 +150,33 @@ $(document).ready(function() {
         <li><input type="text" class="input-small" placeholder="end date" id="end" name="end" value="<%=(config.until) ? config.until : ""%>" onchange="useDateRange()" /></li>
         <li class="divider-vertical"></li>
         <li class="dropdown hidden-zoom4">
-           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-lg fa-cog"></i> Options<b class="fa fa-lg fa-caret-down"></b></a>
+           <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-lg fa-cog"></i> <b class="fa fa-lg fa-caret-down"></b></a>
            <ul id="options" class="dropdown-menu" style="width: 200px;">
+                    <li class="divider"></li>
+                    <li>
+                    <label class="select" style="margin-left: 10px;"> Logged in as: </label>
+                    <label class="select" style="margin-left: 10px;"> <!--# echo var="AUTH_USER" default="unknown user" --> </label>
+                    </li>
+                    <li class="divider"></li>
                     <li>
                     <label class="checkbox" style="margin: 10px">
-                        <input type="checkbox" id="average" name="average" <% if(config.averageSeries) { %>checked="checked"<% } %> onchange="updateGraphs()" />Average Series
+                        <input type="checkbox" id="average" name="average" <% if(config.averageSeries) { %>checked="checked"<% } %> onchange="updateGraphs('forced')" />Average Series
                     </label>
                     </li>
                     <li>
                     <label class="checkbox" style="margin: 10px">
-                        <input type="checkbox" id="sum" name="sum" <% if(config.sumSeries) { %>checked="checked"<% } %> onchange="updateGraphs()" />Sum Series
+                        <input type="checkbox" id="sum" name="sum" <% if(config.sumSeries) { %>checked="checked"<% } %> onchange="updateGraphs('forced')" />Sum Series
                     </label>
                     </li>
                     <li class="divider"></li>
                     <li> 
                     <label class="checkbox" style="margin: 10px">
-                        <input type="checkbox" id="legend" name="legend" <% if(config.legend && config.legend!=="false") {%> checked="checked" <% } %> onchange="updateGraphs()" /> Show Legend
+                        <input type="checkbox" id="legend" name="legend" <% if(config.legend && config.legend!=="false") {%> checked="checked" <% } %> onchange="updateGraphs('forced')" /> Show Legend
                     </label>
                     </li>
                     <li>
                     <label class="checkbox" style="margin: 10px">
-                        <input type="checkbox" id="events" name="events" <% if(config.showEvents && config.showEvents!=="false") {%> checked="checked" <% } %> onchange="updateGraphs()" /> Show Events
+                        <input type="checkbox" id="events" name="events" <% if(config.showEvents && config.showEvents!=="false") {%> checked="checked" <% } %> onchange="updateGraphs('forced')" /> Show Events
                     </label>
                     </li>
                     <li>
@@ -197,15 +196,15 @@ $(document).ready(function() {
                     </div>
                     </li>
                     <li class="divider"></li>
-                    <li class="navbar-text"><center><li class="navbar-text"><button class="btn btn-small btn-primary" onclick="generateGrafanaConfig(); return false;"><i class="fa fa-sign-out active-hover"></i> Export to Grafana</button></center>
+                    <li class="navbar-text"><center><li class="navbar-text"><button class="btn btn-mini btn-primary" onclick="generateGrafanaConfig(); return false;"><i class="fa fa-sign-out active-hover"></i> Export to Grafana</button></center>
                     </li>
-                    <li class="navbar-text"><center><li class="navbar-text"><button class="btn btn-small btn-warning" onclick="downloadGrafanaConfig(); return false;"><i class="fa fa-download active-hover"></i> Download Grafana Config</button></center>
+                    <li class="navbar-text"><center><li class="navbar-text"><button class="btn btn-mini btn-warning" onclick="downloadGrafanaConfig(); return false;"><i class="fa fa-download active-hover"></i> Download Grafana Config</button></center>
                     </li>
             </ul>  
         </li>
         <li class="divider-vertical"></li>
         <li>
-            <button class="btn btn-small btn-primary pull-right hspacer" style="margin-top:8px" onclick="updateGraphs();return false;"><i class="fa fa-circle-arrow-right"></i> Update</button>
+            <button class="btn btn-mini btn-primary pull-right hspacer" style="margin-top:8px" onclick="updateGraphs('forced');return false;"><i class="fa fa-circle-arrow-right"></i> Update</button>
         </li>
         <li class="divider-vertical"></li>
         <li class="hidden-zoom3">
@@ -251,143 +250,146 @@ $(document).ready(function() {
 </head>
 <body lang="en">
     <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <form  id="toolbar" class="navbar-form form-inline pull-left">
-        </form>
-      </div>
+        <div class="navbar-inner">
+            <form  id="toolbar" class="navbar-form form-inline pull-left">
+            </form>
+        </div>
     </div>
-    <div style="margin-top: 48px;"></div>
+    <div style="margin-top: 48px;"><img id="transparent-pixel" src="images/transparent.png", style="float: right;"></div>
     <div id="parameters-toolbar" class="navbar navbar-inverse" style="z-index: 999;">
-      <div class="navbar-inner">
-        <form class="navbar-form form-inline">
-            <span class="pull-left" style="width: 95%">
-            <ul class="nav" id="parametersToolbarContent" ></ul>
-            </span>
-            <span class="pull-right" style="margin-top: 3px"><a href='#' class="btn btn-mini btn-inverse" id="parametersToolbarPin" onclick="togglePinnedParametersToolbar();"><i class="fa fa-lg fa-lock"></i></a></span>
-        </form>
-      </div>    
+        <div class="navbar-inner">
+            <form class="navbar-form form-inline">
+                <span class="pull-left">
+                    <ul class="nav" id="parametersToolbarContent" ></ul>
+                </span>
+                <span class="pull-right" style="margin-top: 3px">
+                    <a href='#' class="btn btn-mini btn-inverse" id="parametersToolbarPin" onclick="togglePinnedParametersToolbar();"><i class="fa fa-lg fa-lock"></i></a>
+                </span>
+            </form>
+        </div>
     </div>
     <div id="message" class="hide"></div>
     <center>
         <div id="loader" class="progress progress-striped active" style="width: 30%;">
-          <div id="progressBar" class="bar" style="width: 100%;">Loading Dashboard...</div>
+            <div id="progressBar" class="bar" style="width: 100%;">Loading Dashboard...</div>
         </div>
     </center>          
-    <div id="dashboards-view" class="container" style="width: 100%">
+    <div id="dashboards-view" class="container" style="width: 100%; float: left">
     </div>
     
-	<div id="extendedGraph" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-	    <div class='lightbox-header'>
-	        <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
-	    </div>
-		<div class='lightbox-content'>
-			<div class="navbar navbar-inverse">
-				<div class="navbar-inner">
-						<ul class="nav">
-							<li><label class="navbar-text" id="extendedGraphTitle"></label></li>
-							<li class="divider-vertical"></li>
-							<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i> Options<b class="fa fa-lg fa-caret-down"></b></a>
-								<ul class="dropdown-menu" style="width: 400px;text-align: left;">
-								    <div style="margin-left: 10px;">
-									   <form id="extendedChartOptionsForm" style="width: 400px;padding-bottom: 0px;">
-									        <h1>Chart Options</h1>
-									        <section>
-									            <div id="renderer_form" class="toggler">
-									                <input type="radio" name="renderer" id="area" value="area" checked>
-									                <label for="area">area</label>
-									                <input type="radio" name="renderer" id="bar" value="bar">
-									                <label for="bar">bar</label>
-									                <input type="radio" name="renderer" id="line" value="line">
-									                <label for="line">line</label>
-									                <input type="radio" name="renderer" id="scatter" value="scatterplot">
-									                <label for="scatter">scatter</label>
-									            </div>
-									        </section>
-									        <section>
-									            <div id="offset_form">
-									                <label for="stack">
-									                    <input type="radio" name="offset" id="stack" value="zero" checked>
-									                    <span>stack</span>
-									                </label>
-									                <label for="stream">
-									                    <input type="radio" name="offset" id="stream" value="wiggle">
-									                    <span>stream</span>
-									                </label>
-									                <label for="pct">
-									                    <input type="radio" name="offset" id="pct" value="expand">
-									                    <span>pct</span>
-									                </label>
-									                <label for="value">
-									                    <input type="radio" name="offset" id="value" value="value">
-									                    <span>value</span>
-									                </label>
-									            </div>
-									            <div id="interpolation_form">
-									                <label for="cardinal">
-									                    <input type="radio" name="interpolation" id="cardinal" value="cardinal" checked>
-									                    <span>cardinal</span>
-									                </label>
-									                <label for="linear">
-									                    <input type="radio" name="interpolation" id="linear" value="linear">
-									                    <span>linear</span>
-									                </label>
-									                <label for="step">
-									                    <input type="radio" name="interpolation" id="step" value="step-after">
-									                    <span>step</span>
-									                </label>
-									            </div>
-									        </section>
-									        <section>
-									            <h6>Smoothing</h6>
-                                                    <div id="smoother" style="width: 80%; padding-left: 5px;"></div>
-									        </section>
-									        <section><span class="trademark">powered by <a href="http://code.shutterstock.com/rickshaw/" target="_blank">rickshaw</a></span></section>
-									    </form>
-									  </div>
-								</ul>
-							</li>
-                            <li style="width: 400px;">
-                                <div id="lightboxProgress" class="progress progress-striped active" style="margin-top: 10px;">
-                                    <div class="bar" id="lightboxProgressText" style="width: 100%;"></div>
-                                </div>
-                            </li>
-                            <li>
-                                <label class="hide label label-warning" style="margin-top: 10px;" id="lightboxProgressWarningWarning"></label>
-                            </li>
-						</ul>
-				</div>
-			</div>
-			<div style="padding: 20px;">
-				<div class="pull-left">
-					<div id="extendedChart"></div>
-					<div id="timeline"></div>
-					<div id="slider" style="margin-top: 30px;"></div>
-				</div>
-				<div class="pull-right">
-					<div style="padding-right: 3px; width: 170px;" id="extendedLegend"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-    <div id="hitogramLightbox" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="extendedGraph" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class='lightbox-header'>
             <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
         </div>
         <div class='lightbox-content'>
             <div class="navbar navbar-inverse">
                 <div class="navbar-inner">
-                        <ul class="nav">
-                            <li><label class="navbar-text" id="histogramTitle"></label></li>
-                            <li class="divider-vertical"></li>
-                            <li style="width: 400px;">
-                                <div id="histogramProgress" class="progress progress-striped active" style="margin-top: 10px;">
-                                    <div class="bar" id="histogramProgressText" style="width: 100%;"></div>
+                    <ul class="nav">
+                        <li><label class="navbar-text" id="extendedGraphTitle"></label></li>
+                        <li class="divider-vertical"></li>
+                        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bar-chart"></i> Options<b class="fa fa-lg fa-caret-down"></b></a>
+                            <ul class="dropdown-menu" style="width: 400px;text-align: left;">
+                                <div style="margin-left: 10px;">
+                                    <form id="extendedChartOptionsForm" style="width: 400px;padding-bottom: 0px;">
+                                        <h1>Chart Options</h1>
+                                        <section>
+                                            <div id="renderer_form" class="toggler">
+                                                <input type="radio" name="renderer" id="area" value="area" checked>
+                                                <label for="area">area</label>
+                                                <input type="radio" name="renderer" id="bar" value="bar">
+                                                <label for="bar">bar</label>
+                                                <input type="radio" name="renderer" id="line" value="line">
+                                                <label for="line">line</label>
+                                                <input type="radio" name="renderer" id="scatter" value="scatterplot">
+                                                <label for="scatter">scatter</label>
+                                            </div>
+                                        </section>
+                                        <section>
+                                            <div id="offset_form">
+                                                <label for="stack">
+                                                    <input type="radio" name="offset" id="stack" value="zero">
+                                                    <span>stack</span>
+                                                </label>
+                                                <label for="stream">
+                                                    <input type="radio" name="offset" id="stream" value="wiggle">
+                                                    <span>stream</span>
+                                                </label>
+                                                <label for="pct">
+                                                    <input type="radio" name="offset" id="pct" value="expand">
+                                                    <span>pct</span>
+                                                </label>
+                                                <label for="value">
+                                                    <input type="radio" name="offset" id="value" value="value" checked>
+                                                    <span>value</span>
+                                                </label>
+                                            </div>
+                                            <div id="interpolation_form">
+                                                <label for="cardinal">
+                                                    <input type="radio" name="interpolation" id="cardinal" value="cardinal">
+                                                    <span>cardinal</span>
+                                                </label>
+                                                <label for="linear">
+                                                    <input type="radio" name="interpolation" id="linear" value="linear" checked>
+                                                    <span>linear</span>
+                                                </label>
+                                                <label for="step">
+                                                    <input type="radio" name="interpolation" id="step" value="step-after">
+                                                    <span>step</span>
+                                                </label>
+                                            </div>
+                                        </section>
+                                        <section>
+                                            <h6>Smoothing</h6>
+                                                <div id="smoother" style="width: 80%; padding-left: 5px;"></div>
+                                        </section>
+                                        <section><span class="trademark">powered by <a href="http://code.shutterstock.com/rickshaw/" target="_blank">rickshaw</a></span></section>
+                                    </form>
                                 </div>
-                            </li>
-                            <li>
-                                <label class="hide label label-warning" style="margin-top: 10px;" id="histogramMultipleSeriesWarning">histogram shows average of multiple series</label>
-                            </li>
-                        </ul>
+                            </ul>
+                        </li>
+                        <li style="width: 400px;">
+                            <div id="lightboxProgress" class="progress progress-striped active" style="margin-top: 10px;">
+                                <div class="bar" id="lightboxProgressText" style="width: 100%;"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <label class="hide label label-warning" style="margin-top: 10px;" id="lightboxProgressWarningWarning"></label>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div style="padding: 20px;">
+                <div class="pull-left">
+                    <div id="extendedChart"></div>
+                    <div id="timeline"></div>
+                    <div id="slider" style="margin-top: 30px;"></div>
+                </div>
+                <div class="pull-right">
+                    <div style="padding-right: 3px; width: 170px;" id="extendedLegend"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="histogramLightbox" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class='lightbox-header'>
+            <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+        </div>
+        <div class='lightbox-content'>
+            <div class="navbar navbar-inverse">
+                <div class="navbar-inner">
+                    <ul class="nav">
+                        <li><label class="navbar-text" id="histogramTitle"></label></li>
+                        <li class="divider-vertical"></li>
+                        <li style="width: 400px;">
+                            <div id="histogramProgress" class="progress progress-striped active" style="margin-top: 10px;">
+                                <div class="bar" id="histogramProgressText" style="width: 100%;"></div>
+                            </div>
+                        </li>
+                        <li>
+                            <label class="hide label label-warning" style="margin-top: 10px;" id="histogramMultipleSeriesWarning">histogram shows average of multiple series</label>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div style="padding: 20px;">
@@ -397,7 +399,35 @@ $(document).ready(function() {
             </div>
         </div>
     </div>
-    <div id="slideShow">
+
+    <div id="graphEvolutionLightbox" class="lightbox hide fade" tabindex="-1" role="dialog" aria-hidden="true" style="position: relative;">
+        <div class='lightbox-header'>
+            <button type="button" class="close" data-dismiss="lightbox" aria-hidden="true">&times;</button>
+        </div>
+        <div class='lightbox-content' style="overflow-y: auto;">
+            <div class="navbar navbar-inverse" style="margin-right: 200px;">
+                <div class="navbar-inner">
+                        <ul class="nav">
+                            <li><label class="navbar-text" id="graphEvolutionTitle"></label></li>
+                            <li class="divider-vertical"></li>
+                            <li style="width: 400px;">
+                                <div id="graphEvolutionProgress" class="progress progress-striped active" style="margin-top: 10px;">
+                                    <div class="bar" id="graphEvolutionProgressText" style="width: 100%;"></div>
+                                </div>
+                            </li>
+                            <li>
+                                <label class="hide label label-warning" style="margin-top: 10px;" id="graphEvolutionWarning">some warning might show up here</label>
+                            </li>
+                        </ul>
+                </div>
+            </div>
+            <div style="padding: 20px; line-height:20px; margin-right: 200px;" id="graphEvolutionContainer">
+                    <div id="graphEvolution"></div>
+                    <div style="padding-right: 3px; width: 180px; position: absolute; top: 15px; right: 30px;" id="graphEvolutionLegend" class="rickshaw_legend"></div>
+            </div>
+        </div>
+    </div>
+    <div id="slideShow" style="display: none;">
         <center><h5 id="slideTitle"></h5></center>
         <center>
             <div id="slideProgress" class="progress progress-striped active hide" style="width: 200px;margin: 10px">

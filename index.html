@@ -3,15 +3,18 @@
 <head>
 <title>Graphitus - Dashboard Index</title>
 <META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/masonry/3.1.1/masonry.pkgd.js"></script>
+
+<link type="text/css" rel="stylesheet" href="css/bootstrap-combined.min.css">
+<link type="text/css" rel="stylesheet" href="css/graphitus.css" media="all">
+
+<script type="text/javascript" src="libs/jquery/2.0.3/jquery.min.js"></script>
+<script type="text/javascript" src="libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script type="text/javascript" src="libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script type="text/javascript" src="libs/masonry/3.1.1/masonry.pkgd.js"></script>
+<script type="text/javascript" src="libs/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="js/common.js"></script>
 <script type="text/javascript" src="js/index.js"></script>
-<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/js/bootstrap.min.js"></script>
-<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-combined.min.css" rel="stylesheet">
-<link rel="stylesheet" href="css/graphitus.css" type="text/css" media="all" />
+
 <script type="text/javascript">
 $(document).ready(function() {
     loadGraphitusConfig(loadDashboards);
@@ -19,7 +22,7 @@ $(document).ready(function() {
 </script>
 <script type="text/template" id="tmpl-dashboards-menu">
 <% if(isLeaf){ %>
-    <li><a href="dashboard.html?id=<%= path %>"><%= name %></a></li>
+    <li><a href="dashboard.html?id=<%= realpath %><%= parametersPreset %>"><%= name %></a></li>
 <% }else{ %>
     <% var isRoot = (depth === 0); %>
     <% if(isRoot){ %><div class="box"><% }; %>
@@ -36,7 +39,7 @@ $(document).ready(function() {
 <body>
     <div class="well" style="height: 38px;padding-top: 0px;">
         <div class="page-header">
-            <h1><em>graphitus</em> <small>dashboards</small></h1>
+            <h1><em>graphitus</em> <small>dashboards - user <!--# echo var="AUTH_USER" default="unknown" --></small></h1>
         </div>
     </div>
     <center>

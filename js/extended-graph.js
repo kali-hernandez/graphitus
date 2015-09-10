@@ -1,5 +1,6 @@
 var extendedChart;
 var extendedChartLegend;
+var graphiteTargetOptions = {};
 
 $(document).ready(function() {
 	$('div.btn-group[data-toggle-name=is_private]').each(function() {
@@ -29,20 +30,45 @@ var palette = new Rickshaw.Color.Palette({
 	scheme: 'colorwheel'
 });
 
+function getRickshawPaletteColor() {
+	if ( palette.runningIndex == palette.scheme.length ) { palette.runningIndex = 0; }
+	return palette.color();
+}
+
+function setRickshawPalette(toScheme) {
+	palette.scheme = toScheme;
+	palette.runningIndex=0;
+}
+
 function loadExtendedGraph(target, dashboardTitle, graphTitle) {
 	$("#extendedGraphTitle").text(dashboardTitle + " - " + graphTitle);
 	showExtendedGrapProgresshMessge("Accessing Graphite metrics API");
 	$('#extendedChart').empty();
 	$('#extendedLegend').empty();
 	$('#timeline').empty();
+	target = stripEventsFromTargets(target);
 	loadGraphiteData(target, function(json) {
 		showExtendedGrapProgresshMessge("Rendering metrics to graph");
+		graphiteTargetOptions = parseGraphiteOptions(target);
 		var data = transformGraphiteData(json);
 		//console.profile("render extended graph");
 		renderExtendedGraph(target, data);
 		//console.profileEnd();
 		showExtendedGrapProgresshMessge("");
 	});
+}
+
+function stripEventsFromTargets(targets) {
+	if ( targets.indexOf("events") == -1 ) {
+		return "targets";
+	};
+	var target_arr = targets.split('&');
+	var result_arr = new Array();
+	for (var i = 0; i < target_arr.length; i++) {
+		if ( target_arr[i].indexOf("events") == -1 ) { result_arr.push(target_arr[i]); };
+	};
+	var result = result_arr.join('&');
+	return result;
 }
 
 function loadExtendedEvents(annotator) {
@@ -56,8 +82,8 @@ function loadExtendedEvents(annotator) {
 		end = moment();
 		start = end.clone().subtract(tsFrame, tsValue);
 	} else {
-		var start = $('#start').val();
-		var end = $('#end').val();
+		start = moment($('#start').val());
+		end = moment($('#end').val());
 	}
 	var eventsUrl = _.template(graphitusConfig.eventsUrl, {
 		start: start.format("YYYY-MM-DD HH:mm:ss"),
@@ -106,17 +132,47 @@ function calculateEventOffset() {
 	}
 }
 
+function parseGraphiteOptions(graphiteUrl) {
+	var graphiteOptions = {};
+	graphiteUrl.replace(/.*\?/,'').split("&").forEach(function(x){
+		var keyValue = x.split("=");
+		graphiteOptions[keyValue[0]] = keyValue[1];
+	});
+	return graphiteOptions;
+}
+
 function renderExtendedGraph(target, data) {
-	var renderer = (target.indexOf('stacked') == -1) ? 'line' : 'area';
+	// get presets from graphite parsed options
+	var min = ( typeof graphiteTargetOptions['yMin'] === "undefined" || graphiteTargetOptions['yMin'] === "" ) ? 'auto' : graphiteTargetOptions['yMin'];
+	var max = graphiteTargetOptions['yMax']; // leave it udefined if not in the graphiteUrl
+	switch ( graphiteTargetOptions['areaMode'] ) {
+		case 'stacked':
+			var renderer = 'area';
+			var stack = true;
+			Rickshaw.Series.zeroFill(data);
+			break;
+		case 'all':
+			var renderer = 'area';
+			Rickshaw.Series.zeroFill(data);
+			var stack = false;
+			break;
+		default:
+			var renderer = 'line';
+			var stack = false;
+			break;
+	}
+
 	$('#' + renderer).click();
 	extendedChart = new Rickshaw.Graph({
 		element: document.getElementById("extendedChart"),
 		width: $(window).width() - 370,
 		height: $(window).height() - 250,
 		renderer: renderer,
+		stack: stack,
 		stroke: true,
-		min: "auto",
-		interpolation: 'cardinal',
+		min: min,
+		max: max,
+		interpolation: 'linear',
 		series: data
 	});
 
@@ -130,14 +186,16 @@ function renderExtendedGraph(target, data) {
 	var hoverDetail = new Rickshaw.Graph.HoverDetail({
 		graph: extendedChart,
 		formatter: function(series, x, y, formattedX, formattedY, d) {
-			return "<span class='y-hover-label-name'>" + series.name + "</span> - &nbsp;<span class='y-hover-label-value'>" + Rickshaw.Fixtures.Number.formatBase1024KMGTPShort(y) + "</span>";
+			var xOffset = moment().zone() * 60;
+			var dotDate=moment(((x + xOffset) * 1000), "").format("YYYY-MM-DD HH:mm");
+			return "<span style='line-height:18px;'><span class='y-hover-label-name'>" + dotDate + "</span> <br> <span class='y-hover-label-name'>" + series.name + "</span> - &nbsp;<span class='y-hover-label-value'>" + Rickshaw.Fixtures.Number.formatBase1024KMGTPShort(y) + "</span></span>";
 		},
 		xFormatter: function(x) {
-			return moment(((x - 7200) * 1000), "").format("YYYY-MM-DD HH:mm")
+			return ""
 		}
-	});
+	} );
 
-	var annotator = new Rickshaw.Graph.Annotate({
+	var annotator = new Rickshaw.Graph.Annotate( {
 		graph: extendedChart,
 		element: document.getElementById('timeline')
 	});
@@ -146,7 +204,8 @@ function renderExtendedGraph(target, data) {
 
 	extendedChartLegend = new Rickshaw.Graph.Legend({
 		graph: extendedChart,
-		element: document.getElementById('extendedLegend')
+		element: document.getElementById('extendedLegend'),
+		naturalOrder: true
 	});
 	var shelving = new Rickshaw.Graph.Behavior.Series.Toggle({
 		graph: extendedChart,
@@ -168,7 +227,7 @@ function renderExtendedGraph(target, data) {
 	});
 
 	var numDataPoints = data[0].data.length;
-	var largeDataScaling = Math.round(numDataPoints / 1000) * 2;
+	var largeDataScaling = Math.round(numDataPoints / 10000);
 	if (largeDataScaling > 1) {
 		console.log("scaling rickshaw graph down by a smoothing factor of: " + largeDataScaling +
 			"in order not to crash the browser because a large number of datapoints was: " + numDataPoints);
@@ -202,15 +261,23 @@ function renderExtendedGraph(target, data) {
 		graph: extendedChart
 	});
 
-	$('#extendedLegend').height($('#extendedChart').height());
-
+    var extendedLegendHeight = $(window).height() - 250;
+    $('#extendedLegend').css({'min-height':extendedLegendHeight});
 	$('#lightboxProgress').hide();
 }
 
 function transformGraphiteData(data) {
 	resultData = _.map(data, function(item) {
+		var color = getRickshawPaletteColor();
+		var stroke = hex2rgb(color);
+
+		if ( graphiteTargetOptions['areaAlpha'] ) {
+			color = hex2rgb(color,graphiteTargetOptions['areaAlpha']);
+		}
+
 		return {
-			"color": palette.color(),
+			"color": color,
+			"stroke" : stroke,
 			"name": item.target.replace(/_/g, ' '),
 			"data": graphiteToRickshawModel(item.datapoints)
 		};
